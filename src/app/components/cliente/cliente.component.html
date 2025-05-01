@@ -10,7 +10,11 @@
     <input type="text" formControlName="telefone" />
   </p>
   <p>
-    <button type="submit">Salvar</button>
+    <button type="submit">
+      {{
+        clienteIdEdicao ? "Atualizar" : "Cadastrar"
+      }}
+      </button>
   </p>
 </form>
 
@@ -32,7 +36,11 @@
     <tr>
       <td>{{item.nome}}</td>
       <td>{{item.telefone}}</td>
-      <td><input type="button" value="Editar"></td>
+      <td>
+        <input type="button" (click)="editar(item.id)" value="Editar">
+        <input type="button" (click)="remover(item.id)" value="Remover">
+
+      </td>
     </tr>
     }
   </tbody>

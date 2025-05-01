@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 export class ClienteComponent {
   clienteForm: FormGroup = new FormGroup({});
   cliente: Cliente[] = [];
+  clienteIdEdicao: string | null = null
 
   constructor(
     private clienteService: ClienteService,
@@ -39,7 +40,65 @@ export class ClienteComponent {
     this.list();
   }
 
+  generateRandomString(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
+
   save() {
-    alert('Podemos salvar!');
+    if (this.clienteForm.valid) {
+      const formData = this.clienteForm.value;
+
+      if(this.clienteIdEdicao){
+        const clienteUpdate:Cliente = {
+          id:this.clienteIdEdicao,
+          nome:formData.nome,
+          telefone:formData.telefone
+        }
+
+        this.clienteService.update(this.clienteIdEdicao,clienteUpdate)
+        this.clienteIdEdicao = null
+        alert('Alterado com sucesso!')
+      }else{
+        const clienteAdd: Cliente = {
+          id: this.generateRandomString(6),
+          nome: formData.nome,
+          telefone: formData.telefone,
+        };
+        //console.log(clienteAdd)
+        this.clienteService.add(clienteAdd) //Chamando a service para inserir
+        alert('Inserido com sucesso') //Enviando feedback ao usuário
+      }
+
+    } else {
+      alert('Favor preencher os campos obrigatórios!');
+    }
+
+    this.clienteForm.reset() //limpar o form após o preenchimento
+  }
+
+  editar(id: string): void {
+    //buscando todos os clientes e filtrando pelo id enviado como parametro
+    const cliente = this.clienteService.list().find(c => c.id == id)
+    if (cliente) {
+      this.clienteIdEdicao = cliente.id
+      //atribuir os valores ao formulario
+      this.clienteForm.patchValue(
+        {
+          nome: cliente.nome,
+          telefone: cliente.telefone,
+        }
+      )
+    }
+  }
+
+  remover(id: string): void {
+    this.clienteService.remove(id)
   }
 }
