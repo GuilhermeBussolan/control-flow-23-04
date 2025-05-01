@@ -1,0 +1,21 @@
+import { ActivatedRoute } from '@angular/router';
+import { routes } from './../../app.routes';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-produto-detalhe',
+  standalone: true,
+  imports: [],
+  templateUrl: './produto-detalhe.component.html',
+  styleUrl: './produto-detalhe.component.css'
+})
+export class ProdutoDetalheComponent {
+  id: number = 0
+  constructor(private route: ActivatedRoute){
+    this.getProdutoById()
+  }
+  getProdutoById(): void{
+    const idParametro = this.route.snapshot.paramMap.get('id')
+    this.id = idParametro ? parseInt(idParametro) : 0
+  }
+}
