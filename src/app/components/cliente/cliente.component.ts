@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ClienteComponent {
   clienteForm: FormGroup = new FormGroup({});
-  cliente: Cliente[] = [];
+  clientes: Cliente[] = [];
   clienteIdEdicao: string | null = null
 
   constructor(
@@ -32,7 +32,7 @@ export class ClienteComponent {
   }
 
   list(): void {
-    this.cliente = this.clienteService.list();
+    this.clienteService.list().subscribe((resposta) => (this.clientes = resposta));
   }
 
   //metodo executado ao inicializar a pagina
@@ -72,7 +72,7 @@ export class ClienteComponent {
           telefone: formData.telefone,
         };
         //console.log(clienteAdd)
-        this.clienteService.add(clienteAdd) //Chamando a service para inserir
+        this.clienteService.add(clienteAdd).subscribe() //Chamando a service para inserir
         alert('Inserido com sucesso') //Enviando feedback ao usuário
       }
 
@@ -80,22 +80,23 @@ export class ClienteComponent {
       alert('Favor preencher os campos obrigatórios!');
     }
 
-    this.clienteForm.reset() //limpar o form após o preenchimento
+    this.clienteForm.reset()
+    this.list()//limpar o form após o preenchimento
   }
 
   editar(id: string): void {
     //buscando todos os clientes e filtrando pelo id enviado como parametro
-    const cliente = this.clienteService.list().find(c => c.id == id)
-    if (cliente) {
-      this.clienteIdEdicao = cliente.id
-      //atribuir os valores ao formulario
-      this.clienteForm.patchValue(
-        {
-          nome: cliente.nome,
-          telefone: cliente.telefone,
-        }
-      )
-    }
+    // const cliente = this.clienteService.list().find(c => c.id == id)
+    // if (cliente) {
+    //   this.clienteIdEdicao = cliente.id
+    //atribuir os valores ao formulario
+    //   this.clienteForm.patchValue(
+    //     {
+    //       nome: cliente.nome,
+    //       telefone: cliente.telefone,
+    //     }
+    //   )
+    // }
   }
 
   remover(id: string): void {

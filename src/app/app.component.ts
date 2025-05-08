@@ -12,7 +12,10 @@ import { NavComponent } from './components/nav/nav.component';
   standalone: true,
   imports: [RouterOutlet,
     InterpolacaoComponent,
-    ControlFlowComponent, ClienteComponent, HomeComponent, NavComponent],
+    ControlFlowComponent,
+    ClienteComponent,
+    HomeComponent,
+    NavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
